@@ -26,7 +26,7 @@ type Props = {
 }
 
 /**
- * The left sidebar (design §10): New chat on top, then History, the saved chats, newest
+ * The left sidebar: New chat on top, then History, the saved chats, newest
  * first, in this browser only. A sidebar on wide screens, a drawer on narrow ones.
  */
 export function HistoryPanel({ chats, openChatId, problem, deleted, generating, nameOf, onOpen, onDelete, onUndo, onClearAll, onNewChat, canStartNew, onClose, onDismissProblem }: Props) {

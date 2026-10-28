@@ -1,4 +1,4 @@
-// What POST /api/agent-token returns: a token for a coding agent (docs/connect-an-agent.md).
+// What POST /api/agent-token returns: a token for a coding agent.
 
 /** The lifetimes the page offers: a day, or a week. */
 export const AGENT_TOKEN_HOURS = [24, 168] as const

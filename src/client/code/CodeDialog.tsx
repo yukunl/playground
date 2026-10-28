@@ -21,7 +21,7 @@ const LANGUAGES: { value: CodeLanguage; label: string }[] = [
   { value: 'python', label: 'Python' },
 ]
 
-/** The setup as a call to Parasail's API (design §11.2), for a developer to take into their own app. */
+/** The setup as a call to Parasail's API, for a developer to take into their own app. */
 export function CodeDialog({ open, onOpenChange, ...form }: Props) {
   // Kept between openings, so someone who wants Python isn't sent back to curl each time.
   const [language, setLanguage] = useState<CodeLanguage>('curl')

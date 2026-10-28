@@ -1,4 +1,4 @@
-// Turns an agent's proposal (a JSON file) into a playground link: docs/agent-handoff.md.
+// Turns an agent's proposal (a JSON file) into a playground link.
 //
 //   npm run share-link -- proposal.json [--base https://playground.example/]
 //

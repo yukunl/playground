@@ -1,4 +1,4 @@
-// Timers that keep a stream from hanging without ever erroring (design §20, §22.2).
+// Timers that keep a stream from hanging without ever erroring.
 
 export type StreamTimings = {
   /** No first token within this long (from sending the request) → abort, and retry. */

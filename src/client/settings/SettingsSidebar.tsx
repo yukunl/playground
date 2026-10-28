@@ -11,7 +11,7 @@ type Props = {
   children: ReactNode
 }
 
-/** Settings on the right, in Single and Compare alike: a sidebar on wide screens, a drawer on narrow ones (design §7). */
+/** Settings on the right, in Single and Compare alike: a sidebar on wide screens, a drawer on narrow ones. */
 export function SettingsSidebar({ canReset, onReset, onClose, children }: Props) {
   return (
     <div className="flex h-full flex-col">

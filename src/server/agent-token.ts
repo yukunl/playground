@@ -1,7 +1,7 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto'
 import type { AgentTokenHours } from '../shared/agent-token'
 
-// Agent tokens (docs/connect-an-agent.md): what a coding agent sends to /api/mcp
+// Agent tokens: what a coding agent sends to /api/mcp
 // instead of the playground password. A signed-in person makes one; it opens the
 // MCP endpoint and nothing else, until it expires. Nothing is stored: the signature
 // proves this server made it, and changing the password revokes every token.

@@ -1,4 +1,4 @@
-// The three events the BFF streams to the browser (docs/design.md §20).
+// The three events the BFF streams to the browser.
 // Each is one JSON object on an SSE `data:` line.
 import type { ApiError } from './api-error'
 

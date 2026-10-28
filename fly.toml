@@ -1,4 +1,4 @@
-# The playground on Fly.io (design §26.3): the same image as `docker compose`,
+# The playground on Fly.io: the same image as `docker compose`,
 # no volume (nothing is stored on the server), one machine that never sleeps.
 # It talks to the real Parasail API. The key is a Fly secret the owner sets:
 #   grep '^PARASAIL_API_KEY=' .env | fly secrets import -a speedboat-playground-yukunl

@@ -1,7 +1,7 @@
 import type { Column } from './chat/types'
 import { estimateTokens, formatCost } from './format'
 
-/** What a panel, or the whole chat, has used so far (design §9). */
+/** What a panel, or the whole chat, has used so far. */
 export type UsageTotal = {
   tokens: number
   costUsd: number

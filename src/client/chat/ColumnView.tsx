@@ -63,7 +63,7 @@ type HeaderProps = {
 }
 
 /**
- * A panel's header in Compare (design §9): A or B, its model, what it has used, and Stop; under
+ * A panel's header in Compare: A or B, its model, what it has used, and Stop; under
  * them, its own values for the settings A and B differ in, so each side's setup sits above its own
  * answers. Models are picked, and the mode changed, in the prompt box.
  */

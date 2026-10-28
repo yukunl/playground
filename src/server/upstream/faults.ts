@@ -1,6 +1,6 @@
 /**
  * Fault switches for what the mock's `?_simulate` can't do: break a stream
- * partway through (design §22.5). Chosen with the `X-Fault` header, and only
+ * partway through. Chosen with the `X-Fault` header, and only
  * when PLAYGROUND_FAULTS is on. Every log line records the active fault.
  *
  *   drop_after:N   close the stream after N tokens

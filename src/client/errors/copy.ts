@@ -1,4 +1,4 @@
-// All error wording lives here (design §12). The headline says what happened in
+// All error wording lives here. The headline says what happened in
 // a few plain words; the body is specific, with real values and what to do next.
 // Button labels stay plain too.
 import type { LucideIcon } from 'lucide-react'
@@ -6,7 +6,7 @@ import { Archive, CalendarClock, CircleAlert, Hourglass, Lock, Ruler, ServerOff,
 import type { ApiError } from '../../shared/api-error'
 import { MAX_RETRIES } from '../chat/retry'
 
-/** Who can fix it (design §12.2): the user, nobody (it fixes itself), or the playground's operators. */
+/** Who can fix it: the user, nobody (it fixes itself), or the playground's operators. */
 export type Bucket = 'you' | 'itself' | 'us'
 
 export type ErrorAction = 'retry' | 'switchModel' | 'newChat' | 'resetSetting' | 'copyDebugInfo'

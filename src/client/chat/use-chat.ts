@@ -10,9 +10,9 @@ export { isBusy }
 
 /**
  * The open chat: its state, plus send, run again, stop, settings, compare and
- * switching chats. A chat has one column, or two in compare (design §9); each
+ * switching chats. A chat has one column, or two in compare; each
  * column is its own conversation with its own settings. Leaving a chat mid-answer
- * doesn't stop it: it finishes in `background`, and the caller saves it (design §10).
+ * doesn't stop it: it finishes in `background`, and the caller saves it.
  * `faultPlan` says how runs should fail on purpose (Weather control, `?_simulate`).
  */
 export function useChat(faultPlan: () => FaultPlan = () => ({})) {

@@ -18,7 +18,7 @@ type Props = {
   onOpenChange: (open: boolean) => void
 }
 
-/** How to connect a coding agent to this playground over MCP (docs/connect-an-agent.md), with a token made here. */
+/** How to connect a coding agent to this playground over MCP, with a token made here. */
 export function ConnectAgentDialog({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange} title="Connect your agent" wide>

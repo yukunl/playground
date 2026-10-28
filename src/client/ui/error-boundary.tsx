@@ -5,7 +5,7 @@ type Props = {
   children: ReactNode
 }
 
-/** Keeps a rendering bug from taking down more than it has to (design §12.7). */
+/** Keeps a rendering bug from taking down more than it has to. */
 export class ErrorBoundary extends Component<Props, { error: Error | null }> {
   state = { error: null as Error | null }
 

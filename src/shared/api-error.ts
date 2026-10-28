@@ -1,4 +1,4 @@
-// The one error shape every /api response uses (docs/design.md §21.3).
+// The one error shape every /api response uses.
 
 export type ErrorType =
   | 'invalid_request'

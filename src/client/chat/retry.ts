@@ -4,8 +4,8 @@ export const MAX_RETRIES = 3
 export const MAX_TOTAL_AUTO_WAIT_MS = 10_000 // across all retries of one run
 
 /**
- * How long to wait before the next retry, or null for "don't retry automatically"
- * (design §22.2). Only asked before the first token: once text is on screen, the
+ * How long to wait before the next retry, or null for "don't retry automatically".
+ * Only asked before the first token: once text is on screen, the
  * run loop never retries by itself, because the answer isn't safe to repeat.
  *
  * `waitedSoFarMs` is the automatic waiting already spent on this run; `random`

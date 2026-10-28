@@ -25,7 +25,7 @@ type Options = {
 }
 
 /**
- * History in this browser (design §10): saves the open chat when a run starts or
+ * History in this browser: saves the open chat when a run starts or
  * ends and when settings change (never per token), lists saved chats, and
  * handles open, delete with undo, and clear all.
  */

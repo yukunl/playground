@@ -28,7 +28,7 @@ type Deps = { config: Config; fetch: typeof fetch; catalog: ModelCatalog; now: (
 
 /**
  * POST /api/chat: one attempt. Validates, calls the inference API once, and
- * streams our three events back. Retrying is the browser's job (design §22.1).
+ * streams our three events back. Retrying is the browser's job.
  */
 export function chatRoutes(deps: Deps) {
   const app = new Hono<AppEnv>()

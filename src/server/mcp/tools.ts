@@ -1,4 +1,4 @@
-// The three tools the playground offers a coding agent over MCP (docs/connect-an-agent.md).
+// The three tools the playground offers a coding agent over MCP.
 // The agent does the searching and the judging; the playground runs what it asks,
 // measures it the way the page does, and turns its top choices into a link.
 import { z } from 'zod'

@@ -1,4 +1,4 @@
-// Sharing by link (docs/design.md §11, §21.2). The link carries everything after
+// Sharing by link. The link carries everything after
 // the `#`, which browsers never send to a server: no ID, no storage, no database.
 // The payload lives here rather than in src/shared because the server never receives one;
 // it only makes them, for an agent's open_in_playground call (src/server/mcp/tools.ts).
@@ -21,7 +21,7 @@ export type ShareMode = 'setup' | 'chat'
 
 const ShareMessageSchema = z.object({ role: z.enum(['user', 'assistant']), text: z.string().max(400_000) })
 
-/** An agent's proposal (docs/agent-handoff.md): its claims, shown above the columns. */
+/** An agent's proposal: its claims, shown above the columns. */
 const ProposalSchema = z.object({
   by: z.string().trim().min(1).max(40),
   title: z.string().trim().min(1).max(120),

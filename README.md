@@ -26,7 +26,9 @@ the password provided privately. The preview uses the real Parasail API.
    and then shows the give-up card; **Stream drops** keeps the partial answer.
 
 **Agent** connects your own coding agent to test models and settings and open its
-finalists in Compare. See the [connection guide](docs/connect-an-agent.md).
+finalists in Compare. Open **Agent** in the header for token creation and the
+Claude Code or Codex setup commands. The [support-triage example](examples/support-triage/)
+includes a system prompt and test cases with expected answers.
 
 ## Run locally
 
@@ -51,7 +53,8 @@ http://localhost:3001/docs. Stop the containers with `docker compose down`.
 
 ### Without Docker
 
-Requires Node 22+ and Python 3.12 (recommended for the pinned mock dependencies).
+Requires Node 22.12+ and Python 3.12 (recommended for the pinned mock dependencies).
+On Windows, use WSL or Docker.
 
 ```bash
 npm ci
@@ -64,12 +67,25 @@ first run. Stop with Ctrl+C.
 
 The mock chooses a canned reply from the last user message and ignores model
 and settings changes, so Compare columns return the same text locally. The
-preview uses real models. For optional local real-API settings, see
-[.env.example](.env.example).
+preview uses real models.
+
+### Real Parasail API (optional)
+
+Create an ignored `.env` in the repo root with your own credentials:
+
+```dotenv
+PARASAIL_BASE_URL=https://api.parasail.io/api/v1/openai
+PARASAIL_API_KEY=psk-<accesskey>-<secretkey>
+PLAYGROUND_PASSWORD=<your-private-password>
+```
+
+Then run `npm run dev` or `docker compose up --build`. The password is required
+when using the real API. Weather control is off by default against the real API;
+add `PLAYGROUND_FAULTS=true` to enable it.
 
 ## Checks
 
-With Node 22+:
+With Node 22.12+:
 
 ```bash
 npm ci
@@ -85,7 +101,6 @@ that no Parasail key appears in the browser bundle.
 
 - [Architecture notes](architecture-notes.md): stack, design choices and tradeoffs.
 - [Submission notes](NOTES.md): scope, AI tooling and known gaps.
-- [Implementation map](docs/architecture.md): request flow and source references.
 - Deployment configuration: [Dockerfile](Dockerfile),
   [docker-compose.yml](docker-compose.yml) and [fly.toml](fly.toml).
 

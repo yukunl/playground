@@ -1,7 +1,7 @@
 import type { AssistantMessage } from '../chat/types'
 
 /**
- * A block ready to paste into a support ticket or a Slack thread (design §12.6).
+ * A block ready to paste into a support ticket or a Slack thread.
  * IDs, timings and settings only: never prompt or answer text. Support searches
  * the logs for the run ID and finds every attempt.
  */

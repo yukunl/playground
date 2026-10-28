@@ -18,7 +18,7 @@ type Context = {
 }
 
 /**
- * Turns an upstream HTTP failure into our error shape (design §22.4).
+ * Turns an upstream HTTP failure into our error shape.
  * Goes by status code, never by body shape: the mock's simulated errors and the
  * real API's errors look different.
  */

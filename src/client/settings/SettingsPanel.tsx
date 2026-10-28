@@ -30,7 +30,7 @@ type Props = {
 }
 
 /**
- * The brief's parameters plus the system prompt (design §7). The model is picked in the
+ * The brief's parameters plus the system prompt. The model is picked in the
  * prompt box. In Compare every setting has an A control and a B control, each editing its own side.
  */
 export function SettingsPanel(props: Props) {

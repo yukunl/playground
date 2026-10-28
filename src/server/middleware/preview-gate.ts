@@ -14,7 +14,7 @@ const OPEN_PATHS = new Set(['/api/health', '/login', '/api/login'])
 export const MCP_PATH = '/api/mcp'
 
 /**
- * The preview gate (design §25): the page and every /api route but health need
+ * The preview gate: the page and every /api route but health need
  * the password, so nobody without it can spend the key, including by calling
  * /api/chat directly. Browsers sign in once on /login and get a cookie; scripts
  * send the password as Basic Auth instead (`curl -u :<password>`, any username).

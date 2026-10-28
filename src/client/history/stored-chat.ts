@@ -1,4 +1,4 @@
-// A chat as it's saved in IndexedDB (docs/design.md §21.1), and the conversions
+// A chat as it's saved in IndexedDB, and the conversions
 // between it and the open chat.
 import { z } from 'zod'
 import { stopStreaming } from '../chat/reducer'

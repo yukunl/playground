@@ -11,7 +11,7 @@ export type LiveModel = {
 }
 
 /**
- * Combines the live list with our model table (design §23.4):
+ * Combines the live list with our model table:
  * - live and in the table → featured, with our name and price; aliases collapse into one row;
  * - live but not in the table → "other", still usable, no price unless the API gave one;
  * - non-chat models → hidden;

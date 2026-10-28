@@ -1,4 +1,4 @@
-// An agent's proposal, carried by a setup link (docs/agent-handoff.md).
+// An agent's proposal, carried by a setup link.
 import { deflateSync } from 'node:zlib'
 import { describe, expect, it } from 'vitest'
 import { linkFor, payloadFromJson } from '../../scripts/share-link'

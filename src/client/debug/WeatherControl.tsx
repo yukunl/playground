@@ -11,7 +11,7 @@ type Props = {
 
 /**
  * A hidden panel (open with `?debug`) for triggering each failure in one click,
- * instead of editing URLs (design §16). It sits collapsed as a small pill so it
+ * instead of editing URLs. It sits collapsed as a small pill so it
  * doesn't cover the page; the chosen preset applies to every run until changed.
  */
 export function WeatherControl({ preset, onChange, faultsEnabled }: Props) {

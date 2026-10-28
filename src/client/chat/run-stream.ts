@@ -41,7 +41,7 @@ type Outcome =
   | { kind: 'cancelled' }
 
 /**
- * One answer, with retries (design §22). The browser owns the retry loop: each
+ * One answer, with retries. The browser owns the retry loop: each
  * attempt is a normal request, so the BFF logs and rate-limits every one, and
  * the user sees a countdown they can cancel. Rules:
  * - only errors that fix themselves are retried, and only before the first token;

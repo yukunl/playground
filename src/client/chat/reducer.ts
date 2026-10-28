@@ -40,7 +40,7 @@ export function initialChat(id = newId('chat'), at = Date.now()): ChatState {
 
 /**
  * Changes worth saving to history. Tokens and retry bookkeeping aren't: a run is
- * saved when it starts and when it ends, never per token (design §10).
+ * saved when it starts and when it ends, never per token.
  */
 const SAVED = new Set<ChatAction['type']>([
   'send', 'rerun', 'done', 'failed', 'interrupted', 'cancelled', 'updateSettings', 'resetSettings', 'setModel', 'addColumn', 'removeColumn', 'clearProposal',
@@ -192,7 +192,7 @@ function apply(state: ChatState, action: ChatAction): ChatState {
 
 /**
  * The open chat, plus chats you left while an answer was still streaming. Those keep
- * receiving their run's events until it ends, then are saved and released (design §10).
+ * receiving their run's events until it ends, then are saved and released.
  */
 export type Workspace = { chat: ChatState; background: ChatState[] }
 

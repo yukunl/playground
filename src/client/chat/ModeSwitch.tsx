@@ -14,7 +14,7 @@ type Props = {
   disabledReason?: string
 }
 
-/** Single or Compare, first in the prompt box (design §9). Two options, so a switch rather than a menu. */
+/** Single or Compare, first in the prompt box. Two options, so a switch rather than a menu. */
 export function ModeSwitch({ mode, onChange, disabledReason }: Props) {
   return (
     <div role="group" aria-label="Mode" className="flex shrink-0 rounded-md border border-slate-300 p-0.5 dark:border-slate-700">

@@ -1,4 +1,4 @@
-// "Code" (docs/design.md §11.2): a column's setup as a curl or Python call a
+// "Code": a column's setup as a curl or Python call a
 // developer can paste into their own app. Both are generated from buildChatRequest's
 // output, the same body the server sends upstream, so the model, prompt and
 // settings can't drift from what the playground runs.

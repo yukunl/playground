@@ -1,4 +1,4 @@
-// Ways to make a run fail on purpose (design §16). They only work when the
+// Ways to make a run fail on purpose. They only work when the
 // server has PLAYGROUND_FAULTS on, and every faked failure is tagged in the logs.
 
 export type FaultPlan = {

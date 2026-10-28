@@ -24,8 +24,8 @@ const STRIPE: Record<Bucket, string> = {
 }
 
 /**
- * A failed or interrupted run, in the conversation where the answer would have been
- * (design §12.5). Never takes focus; announced politely to screen readers.
+ * A failed or interrupted run, in the conversation where the answer would have been.
+ * Never takes focus; announced politely to screen readers.
  */
 export function ErrorCard({ message: m, model, actions }: { message: AssistantMessage; model: string; actions: RunActions }) {
   const error = m.error!

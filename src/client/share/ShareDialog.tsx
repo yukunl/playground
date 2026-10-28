@@ -13,7 +13,7 @@ type Props = {
 
 type Links = Record<ShareMode, string>
 
-/** Share by link (design §11): everything is inside the link, and the dialog says so. */
+/** Share by link: everything is inside the link, and the dialog says so. */
 export function ShareDialog({ open, onOpenChange, chat, draft }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange} title="Share">

@@ -12,7 +12,7 @@ type Props = {
 }
 
 /**
- * Above the columns when a chat came from an agent's proposal (docs/agent-handoff.md).
+ * Above the columns when a chat came from an agent's proposal.
  * Everything here is the agent's claim. The answers come only from running the
  * columns, and the banner says which of the two you're looking at.
  */

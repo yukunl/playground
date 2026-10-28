@@ -1,4 +1,4 @@
-// The chat as the browser holds it (docs/design.md §21.1). A chat is columns,
+// The chat as the browser holds it. A chat is columns,
 // each a plain linear conversation; phase 2 renders one column, compare adds a second.
 import type { ApiError, ErrorType } from '../../shared/api-error'
 import type { Settings } from '../../shared/chat'
@@ -64,7 +64,7 @@ export type Column = {
 }
 
 /**
- * An agent's proposal, opened from a share link (docs/agent-handoff.md). Everything
+ * An agent's proposal, opened from a share link. Everything
  * in it is the agent's claim; the answers come only from running the columns here.
  */
 export type Proposal = {
