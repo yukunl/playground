@@ -31,44 +31,63 @@ Resilience to mock and inference errors:
 - Graceful degradation: if refreshing the model list fails, the app uses the
   last good list. UI error boundaries contain rendering failures.
 
-Try the failure scenarios in Weather control with `?debug`.
+- Resiliency testing panel:
+  [Weather Control](https://speedboat-playground-yukunl.fly.dev/?debug).
 
 ## Production concerns I'd tackle next
 
-1. Authentication and authorization. Everyone currently shares the server's
-   Parasail API key, which keeps setup quick. Without user accounts, I can't
-   attribute usage and costs to individual people. Chat history stays in each
-   browser and isn't tied to an account.
-2. Operational metrics and alerts. I'd track rejected credentials, overload,
-   retries and interrupted streams, and alert developers when failures persist
-   or affect multiple requests.
+I focused this assignment on exploring what the playground could do and making
+it easy to use. If I were shipping it as a real
+product, I'd tackle these next:
+
+- **Authentication and account ownership.** Everyone currently uses the server's
+  Parasail key, which keeps onboarding quick. I'd add sign-in and let users
+  connect their own keys. That would let us attribute usage and costs to each
+  account and build account-level permissions, usage limits, observability and
+  cost summaries.
+
+- **Multi-tenant data model.** I'd give each account clear ownership of its data
+  and permissions. This would let us onboard more users and organizations on
+  shared infrastructure while keeping their data separate.
 
 ## Stack
 
 - Frontend: React, Vite, Tailwind and Radix.
 - Backend: Hono.
 - Database: browser IndexedDB for chat history; no server-side database.
-- Local run: `npm ci && npm run dev:all`, or `docker compose up --build`.
-  Both default to the vendored FastAPI mock. See the [README](README.md) for
-  requirements and access instructions.
-- Hosting: [Fly.io preview](https://speedboat-playground-yukunl.fly.dev), using
-  the real Parasail API.
-- Auth: shared preview password, with a cookie for browsers and Basic Auth for
-  scripts; scoped, expiring tokens for coding agents.
+- Local run:  `docker compose up --build`.
+- Hosting: [Fly.io preview](https://speedboat-playground-yukunl.fly.dev) (real Parasail API)
+- Auth: basic auth shared by all users
 - Observability: structured JSON logs to stdout, inspected through Fly.
 
 ## AI tools used
 
-I used Claude Code heavily for design thinking and implementation.
+I used Claude Code heavily. We worked together on design choices, and I made
+the final decisions. Claude wrote most of the code.
+
+- **Design before code.** I had Claude ask me questions before building, and we
+  went back and forth to check my blind spots. We turned that discussion into
+  our design doc.
+
+- **Building.** I instructed Claude to build in phases. I reviewed the code and
+  tried each phase.
+
+- **Where I pushed back:**
+  - **UI design.** I struggled to get Claude to design the UI interactions. I
+    still had to come up with them and judge the layout and readability myself.
+  - **Scope creep.** I quickly realized my scope was bloating with AI. When
+    things were so easy to build, it was super tempting to keep going. I had to
+    set a final product goal and stop there.
 
 ## What I cut, and why
 
 - Authentication, authorization, general rate limits, a spend budget, an ops
-  page and alerts. I kept the scope focused on resilience.
+  page and alerts. I kept the scope focused on exploring and enhancing user experience.
 - Server-side storage and multitenancy. I'd add these alongside user identities
   and access controls so stored chats have clear owners and permissions.
-- Resumable streams. Interrupted text stays visible; reconnecting a live run
-  would require state across requests.
+- **Resuming interrupted responses.** I kept partial answers and manual retry
+  to limit scope. Resuming the same generation would require the server to
+  retain output and manage reconnections.
 - More than two Compare columns. With more setups side by side, the display
   could get chaotic.
 
@@ -88,13 +107,18 @@ errors.
 
 - Start with the [README walkthrough](README.md#what-to-try) and
   [architecture notes](architecture-notes.md).
-- Use `?debug` to try recovery after two 429s, repeated 503s, rejected
-  credentials and a stream dropping partway through. Against the real API,
-  the playground simulates these faults and never sends them to Parasail.
 
-Verification includes a clean dependency install, unit and API integration
-tests, a production build and a streaming smoke check against the mock. Browser
-end-to-end tests are not included, and I did not run Docker Compose end to end
-locally. Fallback model prices are maintained by hand, so displayed costs are
-estimates. Word-by-word display pauses in a background tab until animation
-frames resume.
+- Check out the resiliency testing panel,
+  [Weather Control](https://speedboat-playground-yukunl.fly.dev/?debug).
+  Use it to simulate faults and check retries, error messages and partial-answer
+  preservation. I used a parasailing analogy for the scenarios:
+
+  - Clear skies: no faults.
+  - Busy skies, clears up: two 429s, then recovery.
+  - Still grounded: repeated 503s.
+  - Engine trouble: 401.
+  - Early landing: stream cut off.
+
+- **Prices.** I included the price display for the look and feel. The preview
+  uses a manually maintained table of online list prices, so displayed costs
+  are estimates.
