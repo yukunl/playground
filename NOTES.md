@@ -93,15 +93,15 @@ the final decisions. Claude wrote most of the code.
 
 ## What breaks at 10× / 100×
 
-At 10×, I expect more upstream overload and contention on the shared key.
-One visitor can also consume the key's allowance because browser traffic has
-no per-visitor limit.
+At 10×, everyone still shares one Parasail key, so we'd hit its rate limits
+more often. One visitor could also use up the key's allowance, because the
+browser has no per-person limit.
 
-At 100×, concurrent streams and state held in one process become additional
-constraints. Agent run counters reset on restart and are not shared across
-instances. I'd add shared limits and budget accounting before scaling out,
-then measure connection capacity and sample successful logs while retaining
-errors.
+At 100×, open streams start to strain one server, so I'd need more servers.
+But some state lives in one server's memory: agent run counts reset on restart
+and wouldn't be shared between servers. Before scaling out, I'd move limits and
+spend tracking to shared storage, load-test how many streams a server can hold,
+and keep every error log but only a sample of successful ones.
 
 ## Anything you want a reviewer to know
 
