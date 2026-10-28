@@ -1,0 +1,4 @@
+# Keeps the local virtualenv (scripts/mock.sh) out of the image build context.
+.venv
+**/__pycache__
+fly.toml

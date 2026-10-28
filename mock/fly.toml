@@ -1,0 +1,21 @@
+# The Parasail mock as a private Fly app: no public service, so only apps in the
+# same Fly organization reach it, at http://speedboat-playground-mock-yukunl.internal:3001.
+# The mock's own files are unchanged; this deploy config is the only addition.
+#
+# Not currently deployed (the preview runs on the real API). To bring it back, from the repo root:
+#   fly apps create speedboat-playground-mock-yukunl
+#   fly deploy mock --ha=false
+
+app = "speedboat-playground-mock-yukunl"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[processes]
+  # The image binds IPv4 only; Fly's internal network is IPv6, so listen on :: (both).
+  app = "uvicorn main:app --host :: --port 3001"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

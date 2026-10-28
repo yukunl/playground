@@ -1,0 +1,109 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Dark mode follows the `dark` class on <html>, which theme.ts sets (System, Light or Dark). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Colors are Parasail's own, read from parasail.io's stylesheet on 2026-10-25. */
+@theme {
+  /* Slate becomes Parasail's near-neutral greys, so dark mode is their near-black (#030304) and
+     primary buttons are ink: near-black on light, off-white on dark, like parasail.io's. */
+  --color-slate-50: #fafafb;
+  --color-slate-100: #f1f2f2;
+  --color-slate-200: #e7e8e9;
+  --color-slate-300: #cdcecf;
+  /* Field edges and small icons: 3:1 on white and slate-50 (WCAG 1.4.11). */
+  --color-slate-400: #8e8f91;
+  /* Muted text, light mode: 4.5:1 on white, slate-50 and slate-100. Dark mode swaps it below. */
+  --color-slate-500: #6c6d6f;
+  /* Field edges in dark mode: 3:1 on near-black. */
+  --color-slate-600: #5f6062;
+  --color-slate-700: #3c3d40;
+  --color-slate-800: #252628;
+  --color-slate-900: #121315;
+  --color-slate-950: #030304;
+
+  /* Parasail cobalt, the dot on parasail.io's section labels: the one accent, for focus, sliders and
+     "changed" dots. Shifted a step so 500 (#2850E4) keeps 3:1 on white and near-black alike. */
+  --color-brand-50: #edf2ff;
+  --color-brand-100: #cadfff;
+  --color-brand-200: #97b7ff;
+  --color-brand-300: #7a9cfa;
+  --color-brand-400: #5883f4;
+  --color-brand-500: #2850e4;
+  --color-brand-600: #1215d0;
+  --color-brand-700: #0f00b6;
+  --color-brand-800: #0e0097;
+  --color-brand-900: #0b0079;
+  --color-brand-950: #080059;
+
+  /* Parasail teal, the token bars on parasail.io's front page. Only for live output: the streaming
+     caret, the "Waiting for the model…" glint and the streaming dot. */
+  --color-teal-50: #eafffa;
+  --color-teal-100: #d8fbf2;
+  --color-teal-200: #b7f6e6;
+  --color-teal-300: #88eed7;
+  --color-teal-400: #54e7ca;
+  --color-teal-500: #06e0c0;
+  --color-teal-600: #00ae91;
+  --color-teal-700: #007d65;
+  --color-teal-800: #005340;
+  --color-teal-900: #002c1e;
+  --color-teal-950: #000f07;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+    /* No one grey reaches 4.5:1 on both white and near-black, so muted text (slate-500, used in
+       both modes) takes slate-400 here: 4.6:1 or better on slate-950, -900 and -800. */
+    --color-slate-500: var(--color-slate-400);
+  }
+  body {
+    @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  }
+}
+
+/* The blinking ▌ at the end of an answer that's still streaming, inline after the last word. */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.is-streaming .prose > :is(p, h1, h2, h3, h4, blockquote):last-child::after,
+.is-streaming .prose > :is(ul, ol):last-child > li:last-child::after {
+  content: '▌';
+  margin-left: 0.1em;
+  color: var(--color-teal-600);
+  animation: caret-blink 1s step-end infinite;
+}
+
+/* The "Waiting for the model…" shimmer: a teal glint. Off for people who asked for less motion. */
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+.shimmer {
+  background: linear-gradient(90deg, currentColor 40%, var(--color-teal-600) 50%, currentColor 60%) 0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    color: inherit;
+    background: none;
+  }
+  .is-streaming .prose *::after {
+    animation: none !important;
+  }
+}

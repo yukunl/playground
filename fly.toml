@@ -1,0 +1,51 @@
+# The playground on Fly.io (design §26.3): the same image as `docker compose`,
+# no volume (nothing is stored on the server), one machine that never sleeps.
+# It talks to the real Parasail API. The key is a Fly secret the owner sets:
+#   grep '^PARASAIL_API_KEY=' .env | fly secrets import -a speedboat-playground-yukunl
+# Without it the server refuses to start, so a deploy can't go live keyless.
+# The same goes for the password gate on the page and every /api route but health,
+# so a deploy can't go live with the key open to anyone who finds the URL:
+#   fly secrets set PLAYGROUND_PASSWORD=<password> -a speedboat-playground-yukunl
+# force_https below keeps the password off plain HTTP.
+#
+# Deploy from the repo root:
+#   fly deploy --ha=false --build-arg GIT_SHA=$(git rev-parse --short HEAD)
+
+app = "speedboat-playground-yukunl"
+primary_region = "sjc"
+# On SIGTERM the server lets open streams finish for up to 30 s (src/server/index.ts).
+kill_timeout = "35s"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PARASAIL_BASE_URL = "https://api.parasail.io/api/v1/openai"
+  # To run the preview on the private mock app instead (mock/fly.toml), no key needed:
+  # PARASAIL_BASE_URL = "http://speedboat-playground-mock-yukunl.internal:3001"
+  # `?_simulate` and Weather control stay on; the server answers them itself, never Parasail.
+  PLAYGROUND_FAULTS = "true"
+  PORT = "3000"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  # No cold starts: the first token is the sales pitch.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "15s"
+    timeout = "3s"
+    method = "GET"
+    path = "/api/health"
+
+[deploy]
+  # Start the new machine and pass its health check before stopping the old one.
+  strategy = "bluegreen"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parasail Playground</title>
+    <!-- Parasail's sail mark (src/client/ui/parasail-mark.tsx), ink on light tabs and off-white on dark ones. -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22.2 22'%3E%3Cstyle%3Epath%7Bfill:%23030304%7D@media (prefers-color-scheme:dark)%7Bpath%7Bfill:%23fafafb%7D%7D%3C/style%3E%3Cpath d='M0 14.5313C4.12467 14.5313 7.46831 17.8751 7.46831 21.9996H0V14.5313Z'/%3E%3Cpath fill-rule='evenodd' d='M0 7.04705V7.06376C8.2495 7.06387 14.9366 13.7511 14.9366 22H14.9533L14.9366 21.9674C17.9903 21.7842 23.0622 19.7238 21.803 13.1846C20.1335 6.8501 15.1446 1.86298 8.8093 0.195519C2.27485 -1.05826 0.215833 4.01054 0.0331967 7.0632L0 7.04705Z'/%3E%3C/svg%3E"
+    />
+    <script>
+      // Set the theme before first paint so dark mode doesn't flash white. Same key as src/client/theme.ts.
+      ;(function () {
+        var theme = null
+        try {
+          theme = localStorage.getItem('playground.theme')
+        } catch (e) {}
+        if (theme === 'dark' || (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark')
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/client/main.tsx"></script>
+  </body>
+</html>

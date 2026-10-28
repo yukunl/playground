@@ -1,0 +1,37 @@
+# One command: docker compose up  →  http://localhost:3000
+# Works with no .env: the app talks to the mock with the mock key.
+services:
+  app:
+    build:
+      context: .
+      args:
+        GIT_SHA: ${GIT_SHA:-dev}
+    ports:
+      - "3000:3000"
+    environment:
+      PARASAIL_BASE_URL: ${PARASAIL_BASE_URL:-http://mock:3001}
+      PARASAIL_API_KEY: ${PARASAIL_API_KEY:-psk-mock-mockkey}
+      PLAYGROUND_FAULTS: ${PLAYGROUND_FAULTS:-true}
+      # Empty = no gate. Required when PARASAIL_BASE_URL is the real API.
+      PLAYGROUND_PASSWORD: ${PLAYGROUND_PASSWORD:-}
+    depends_on:
+      mock:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  mock:
+    build: ./mock
+    ports:
+      - "3001:3001"
+    environment:
+      MOCK_LATENCY_MIN_MS: ${MOCK_LATENCY_MIN_MS:-50}
+      MOCK_LATENCY_MAX_MS: ${MOCK_LATENCY_MAX_MS:-300}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3001/healthz').read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
