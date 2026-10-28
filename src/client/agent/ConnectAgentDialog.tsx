@@ -10,7 +10,7 @@ const TOKEN_VAR = 'PLAYGROUND_AGENT_TOKEN'
 
 const HOURS_LABEL: Record<AgentTokenHours, string> = { 24: '1 day', 168: '7 days' }
 
-const EXAMPLE_ASK = `My system prompt is in prompt.txt, and my test cases with the answers I expect are in cases.jsonl. Today I pay $2.00 per million input tokens and $8.00 per million output tokens, with about 900 ms to the first token.
+const EXAMPLE_ASK = `My system prompt is in examples/agent-connect-example/example_prompt.txt, and my test cases with the answers I expect are in examples/agent-connect-example/cases.jsonl. Today I pay $2.00 per million input tokens and $8.00 per million output tokens, with about 900 ms to the first token.
 Using ${SERVER_NAME}, test 3 or 4 models at temperature 0 against my expected answers, and compare accuracy, cost and latency with what I have today. Then open your top two in the playground.`
 
 type Props = {

@@ -1,8 +1,0 @@
-{"input": "I was charged twice for March. Please refund the extra $49.", "expected": "{\"category\": \"billing\", \"urgent\": true}"}
-{"input": "The Gantt view doesn't load since this morning, just a spinner. My whole team can't plan the sprint.", "expected": "{\"category\": \"bug\", \"urgent\": true}"}
-{"input": "Could you add a dark mode? My eyes would thank you.", "expected": "{\"category\": \"feature_request\", \"urgent\": false}"}
-{"input": "I lost my phone and can't get past two-factor. I have a client demo in an hour.", "expected": "{\"category\": \"account\", \"urgent\": true}"}
-{"input": "How do I switch our plan from monthly to yearly billing?", "expected": "{\"category\": \"billing\", \"urgent\": false}"}
-{"input": "When I drag a task to another column, its due date shifts by one day. Not blocking, but annoying.", "expected": "{\"category\": \"bug\", \"urgent\": false}"}
-{"input": "Do you have an office in Berlin? We'd like to visit.", "expected": "{\"category\": \"other\", \"urgent\": false}"}
-{"input": "Please remove Jordan from our workspace, they left the company.", "expected": "{\"category\": \"account\", \"urgent\": false}"}

@@ -27,8 +27,8 @@ the password provided privately. The preview uses the real Parasail API.
 
 **Agent** connects your own coding agent to test models and settings and open its
 finalists in Compare. Open **Agent** in the header for token creation and the
-Claude Code or Codex setup commands. The [support-triage example](examples/support-triage/)
-includes a system prompt and test cases with expected answers.
+Claude Code or Codex setup commands. The [agent connection example](examples/agent-connect-example/)
+includes an expense policy prompt and test cases with expected answers.
 
 ## Run locally
 

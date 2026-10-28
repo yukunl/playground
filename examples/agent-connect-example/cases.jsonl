@@ -1,0 +1,10 @@
+{"input": "Dinner on my Chicago work trip was $62, including a $14 glass of wine. Receipt attached.", "expected": {"decision": "partial", "reimbursable_usd": 48, "rule": "E1"}}
+{"input": "I took 3 people from Acme to lunch, so 4 of us with me. $380 total, their names are in the report.", "expected": {"decision": "approve", "reimbursable_usd": 380, "rule": "E2"}}
+{"input": "Business class to Tokyo, an 11-hour flight, $4,200. My VP approved it by email beforehand.", "expected": {"decision": "approve", "reimbursable_usd": 4200, "rule": "E3"}}
+{"input": "I booked business class for my 3-hour flight to Denver, $890.", "expected": {"decision": "reject", "reimbursable_usd": 0, "rule": "E3"}}
+{"input": "Hotel in Austin, 2 nights at $310 a night.", "expected": {"decision": "partial", "reimbursable_usd": 500, "rule": "E4"}}
+{"input": "Hotel in New York, 3 nights at $280 a night, $840 total.", "expected": {"decision": "approve", "reimbursable_usd": 840, "rule": "E4"}}
+{"input": "I drove my own car 120 miles round trip to a customer site.", "expected": {"decision": "approve", "reimbursable_usd": 84, "rule": "E5"}}
+{"input": "Taxi from the airport was $45, but I lost the receipt.", "expected": {"decision": "needs_approval", "reimbursable_usd": null, "rule": "E7"}}
+{"input": "Submitting a $180 client dinner for 2 from 75 days ago. Names are in the report.", "expected": {"decision": "reject", "reimbursable_usd": 0, "rule": "E7"}}
+{"input": "I bought a $420 desk chair for my home office. I haven't used my allowance this year.", "expected": {"decision": "approve", "reimbursable_usd": 420, "rule": "E6"}}
