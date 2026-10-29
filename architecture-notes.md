@@ -2,156 +2,142 @@
 
 ## At a glance
 
-- Path shipped: Model Playground with two-column Compare and agent proposals.
-- Production extension: resilience to mock and inference errors.
-- Stack: React 19, Vite, Tailwind and Radix; Hono on Node 22; no server database;
-  Fly.io hosting.
-- Preview: real Parasail models behind a shared password. Local runs default to
-  the vendored FastAPI mock, which returns canned answers.
-- Production-readiness: 3/10. Streaming recovery, validation, credential handling
-  and tests are implemented. Per-user identity, general rate limits, a daily
-  budget, operational metrics and alerts remain future work.
+- **Path(s) shipped:** Path 1, Model Playground, plus side-by-side Compare and
+  an MCP endpoint for coding agents. Production extension: error resilience.
+- **Stack (frontend, backend, DB, hosting):** React + Vite, Hono, no server
+  database (chats stay in browser IndexedDB), Fly.io.
+- **What's available via preview URL vs local-only:**
+  [Preview](https://speedboat-playground-yukunl.fly.dev/)
+- **Estimated production-readiness, 1–10:** 5. Fine for a small trusted group;
+  missing per-user accounts, server-side storage, spend limits and alerting.
 
 ## Architecture diagram
 
 ```mermaid
 flowchart LR
-  Browser["React SPA<br/>chat state · retries · browser history"]
+  Browser["Browser frontend<br/>React · Tailwind · Radix<br/>built with Vite"]
+  Local["Browser storage<br/>IndexedDB · saved chats"]
   Agent["Coding agent"]
-  API["Node 22 + Hono<br/>preview gate · validation · SSE"]
-  Upstream["Parasail API (preview)<br/>FastAPI mock (local)"]
-  Browser <-->|HTTP / SSE| API
-  Agent <-->|MCP + agent token| API
-  API <-->|Server-side API key| Upstream
+  API["Backend on Fly.io<br/>Node.js + Hono<br/>sign-in · request checks · streaming"]
+  Upstream["Model service<br/>Parasail API (preview)<br/>FastAPI mock (local)"]
+  Browser <-->|"Save / load chats"| Local
+  Browser <-->|"Prompts<br/>streamed answers"| API
+  Agent <-->|"Agent tools (MCP)<br/>access token"| API
+  API <-->|"Model calls<br/>server-side API key"| Upstream
 ```
 
-The production server serves the page and API in one process. During development,
-Vite serves the page and proxies API calls to Hono. The inference service is
-selected through server configuration.
+Vite runs the frontend development server locally and builds the frontend files
+for deployment. On Fly.io, Hono serves those built files and handles API requests.
+
+The browser sends prompts over HTTP. Hono sends the answer back in pieces using
+Server-Sent Events (SSE).
 
 ## Auth
 
-There are no user accounts. A shared password avoids account setup for the
-preview. Browsers sign in and receive a 30-day HttpOnly, SameSite=Lax cookie,
-marked Secure over HTTPS. Scripts can use Basic Auth. Changing the password
-invalidates browser sessions and agent tokens.
+I use a shared password to keep strangers from spending the Parasail key.
+Browsers use a sign-in page; scripts use Basic Auth.
 
-A signed-in visitor can mint an agent token lasting one or seven days. The server
-verifies its signature and grants access to `/api/mcp` only. Tokens cannot mint
-more tokens or call the chat API; usage is counted in memory.
-
-The Parasail key lives in the server environment: an ignored local `.env` or a
-Fly secret. Startup requires both a key and preview password for the real API.
-Docker excludes local environment files, and the build scans browser output for
-Parasail key patterns.
-
-Unauthenticated API requests return 401; page requests redirect to sign-in.
-An upstream 401/403 becomes a non-retryable `service_misconfigured` error,
-returned as 502, because the playground owns the rejected key. Health remains
-open for platform checks.
-
-The shared password provides no per-user attribution or individual revocation,
-and login attempts are not throttled. Production would need user and organization
-identity with per-user limits.
+- **Identity:** No individual user accounts.
+- **Token storage / refresh:** The password and Parasail key are stored as Fly
+  secrets. There is no automatic refresh.
+- **What happens on 401:** Page requests redirect to sign-in, then back to the
+  original page. API requests with missing or invalid credentials return 401.
+- **What I'd do differently in production:** Per-user sign-in (SSO), organization
+  membership and roles, per-user API keys, a way to revoke one user's access,
+  and limits on sign-in attempts.
 
 ## Data model
 
-Chats live in IndexedDB, capped at the newest 100 per browser profile:
+I keep the newest 100 chats in IndexedDB for each browser profile. The main
+saved fields:
 
 ```text
 StoredChat { v: 1, id, title, createdAt, updatedAt, columns, proposal?, sharedFrom? }
 Column     { id, settings, messages, proposed? }
 ```
 
-Settings include model, system prompt, temperature, top-p, max tokens, stop and
-seed. Assistant messages retain the settings used, status, attempts and available
-usage and cost. Versioned records are validated on read; unsupported records are
-skipped. A format change would need an explicit upgrader.
-
-Share links encode a setup or chat in the URL fragment, which is not sent in the
-HTTP request. Links have no server-managed expiry or revocation.
-
-The application server persists no chat data. Its model cache, agent run counters
-and execution queue are in memory. There is no tenant isolation within one browser
-profile. With accounts and server persistence, I'd scope every chat and share to
-an organization and authorize access through its user membership.
+- **Tenancy model (org → user → resource):** There are no user or team workspaces.
+- **What lives in the browser vs the server:** Messages, model choices, system
+  prompts and tuning parameters stay in the browser. The server doesn't save
+  chat history or settings.
+- **Migrations / schema-evolution story:** No migrations yet. Saved chats use
+  format version 1.
 
 ## State management
 
-A React reducer keeps each chat's settings, messages and run transitions together;
-the state belongs to one screen. Compare has two independent columns. A separate
-display queue reveals words gradually while network consumption continues at
-full speed. Timing statistics measure network arrival, independently of display
-pacing.
-
-IndexedDB stores history. Local storage caches model selection and holds pending
-saves during page unload. A reloaded partial answer reopens as stopped. Reduced
-motion displays incoming text immediately.
-
-The server caches the model list for five minutes, coalesces concurrent refreshes
-and falls back to stale data when refresh fails. Completions are not cached. At
-10×, I'd keep model caches local but move limits and budget accounting into shared
-storage before adding instances.
+- **Client-side state choice (and why not the alternative):** One React reducer
+  holds the settings, messages and status of each run. A global store would be
+  overkill for one screen.
+- **Server-side caching or invalidation, if any:** Only the model list, cached
+  for 5 minutes. If a refresh fails, the last good list is used. Answers are
+  never cached.
+- **What I'd change at 10×:** Chats can stay in the browser. I'd move limits and
+  agent run counts to shared storage so all servers use the same counts, then
+  load-test how many open streams one server can hold.
 
 ## Error & resilience
 
-For interactive chat, the browser owns retries and the Hono handler makes one
-completion call per attempt. Eligible failures before the first received token
-allow up to three retries, with jittered backoff and a 10-second total automatic
-wait budget. `Retry-After` is honored; a delay beyond that budget hands control
-back to the user. A 429 shows a countdown with Cancel.
+Try failures on the preview with
+[Weather Control](https://speedboat-playground-yukunl.fly.dev/?debug).
 
-After text arrives, failure keeps the partial answer and requires an explicit
-retry. Stop freezes the visible prefix, clears queued display text and aborts
-the request. The server propagates cancellation upstream.
-
-Chat streams have a 30-second first-token timeout, a 20-second stall timeout and
-15-second heartbeats. The server validates settings and caps chat bodies at
-512 KiB. It normalizes upstream responses into `token`, `error` and `done`
-events, including errors after streaming has started.
-
-MCP runs use a separate bounded retry loop on the server. They allow at most two
-concurrent completions per process and 300 requested inputs per agent token.
-The allowance resets on restart and is independent on each instance; it is not a
-durable spend limit. Partial failures are returned without replaying the answer.
-
-Fault injection reproduces overload, unavailability, rejected credentials and
-dropped streams. Against the real API, the playground answers these faults
-itself. Resuming interrupted streams remains future work.
+- **Where the retry boundary lives:** Chat retries happen in the browser, only
+  before any text is received: up to 3 retries (about 1 s, 2 s, 4 s), never
+  sooner than `Retry-After` specifies. MCP retries happen on the server, because
+  agents have no browser.
+- **What happens when a stream drops mid-request:** The text so far stays on
+  screen, marked interrupted, and the user can retry. The server ends a request
+  if no text arrives within 30 s, or if an active stream goes silent for 20 s.
+- **What happens when the mock returns 429 (you can simulate this):** The user
+  sees a countdown they can cancel, then an automatic retry. After 3 failed
+  retries, an error card offers Retry or another model. In Weather Control,
+  "Busy skies, clears up" sends two 429s, then succeeds; these faults never
+  reach Parasail.
+- **What I'd add for production that I didn't add here:** Per-account rate and
+  spend limits, and alerts. Later, resuming a cut-off answer if disconnects
+  become common.
 
 ## Observability
 
-Chat attempt logs include run, request and upstream request IDs, model, outcome,
-status, duration and fault information. MCP logs record tool, token ID, outcome,
-run count, duration and available aggregate cost. These logs omit prompts and
-answers.
-
-The browser shows time to first token, throughput and estimated cost from reported
-usage and available pricing. The model table supplies dated fallback prices.
-There are no collected operational metrics, alert rules or distributed traces.
-Request IDs are forwarded upstream.
-
-I'd alert first on rejected credentials, sustained upstream overload, repeated
-give-ups and interrupted streams.
+- **Logs:** One JSON line per chat attempt and per agent tool call, collected by
+  Fly: IDs, outcome, status and duration. Prompts and answers are never logged.
+- **Metrics:** Only in the browser: time to first token, speed, tokens and
+  estimated cost. No server-side operational metrics are collected.
+- **Traces (if any):** None. Each request's ID is sent to Parasail as
+  `X-Request-Id`, so logs can be matched by hand.
+- **What I'd alert on first:** Repeated failed sign-ins from one IP (not logged
+  yet), long stretches of overload, and more requests that fail after all
+  retries or streams that cut off.
 
 ## Tradeoffs I'd defend
 
-1. Hono + Vite keeps streaming in one long-running server and leaves rendering in
-   the browser. Server-rendered HTML would add little to this client-only flow.
-2. Browser-owned chat retries make waiting and cancellation visible. MCP needs
-   its own server loop because the agent does not use the browser run loop.
-3. A normalized stream gives the client one error and usage contract across
-   providers, at the cost of an adapter that needs careful tests.
-4. Browser history and fragment-based shares avoid server persistence of chat
-   content. The tradeoffs are browser-local history and links without revocation.
+1. **Keeping the key on the server.** Calling Parasail directly from the browser
+   would expose the shared API key. The Hono server holds it, checks the password
+   and serves MCP. Chat state, history and retries stay in the browser.
+2. **Chat retries in the browser.** Each wait is a countdown users can cancel.
+   Retrying quietly on the server could leave them watching a long spinner.
+   MCP retries run on the server because agents have no browser.
+3. **One stream format.** I translate both mock and real API responses into
+   `token`, `error` and `done` events so the UI handles them the same way. This
+   adds a translation layer that needs its own tests.
+4. **Pacing the text.** Parasail's fast, uneven bursts made answers jump. I added
+   a word buffer that speeds up when a backlog builds. The display can lag
+   behind the network; speed stats still use arrival times.
 
 ## What I'd build next
 
-First, per-visitor concurrency limits and a daily budget that reserves maximum
-request cost, then settles against reported usage. I'd make that accounting shared
-before scaling the service.
+### Functionality
 
-Second, operational metrics and alerts built from complete attempt events,
-including upstream timing, usage and cost. After that, user and organization
-identity for attribution and access control, and resumable streams if disconnect
-logs justify the extra state.
+- **Tool calling:** Let the model being tested call tools and MCP servers, so
+  people can evaluate its tool use alongside its answers.
+
+### Production readiness
+
+- **Identity and credentials:** Per-user sign-in, access control and an API key
+  for each account.
+- **Limits:** Enforce per-account request, concurrency and spend limits across
+  servers, and throttle sign-in attempts.
+- **Persistence:** Save chats on the server, with migrations, backups and
+  tested restores.
+- **Multi-tenancy:** Check account ownership on every read and write, with tests
+  that one customer can't see another's data.
+- **Operations:** Central logs, tracing, metrics and alerts.
