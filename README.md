@@ -24,9 +24,9 @@ the password provided privately. The preview uses the real Parasail API.
 4. Open [Weather control](https://speedboat-playground-yukunl.fly.dev/?debug).
    **Busy, then recovers** retries after two 429s; **Model unavailable** retries
    and then shows the give-up card; **Stream drops** keeps the partial answer.
-5. **Agent** connects your own coding agent to test models and settings and open
-   its finalists in Compare. Open **Agent** in the header for token creation and
-   the Claude Code or Codex setup commands. The
+5. **Agent Playground:** Connect Codex or Claude Code to the playground to run
+   high-volume evaluations, then review the agent's top choices in Compare.
+   Open **Agent** in the header for a token and setup commands. The
    [agent connection example](examples/agent-connect-example/) includes an expense
    policy prompt and test cases with expected answers.
 
