@@ -5,7 +5,8 @@ export const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(
 const MOD = isMac ? '⌘' : 'Ctrl+'
 
 export const SHORTCUTS = [
-  { keys: `${MOD}↵`, does: 'Run' },
+  { keys: '↵', does: 'Run' },
+  { keys: '⇧↵', does: 'New line' },
   { keys: `${MOD}⇧↵`, does: 'Run the last message again (replaces its answer; in compare, the focused column)' },
   { keys: 'Esc', does: 'Stop while streaming (both columns in compare); otherwise close what is open' },
   { keys: `${MOD}K`, does: 'Switch model' },
@@ -23,7 +24,7 @@ type Actions = {
 }
 
 /**
- * The page-wide shortcuts. ⌘↵ lives in the input box itself. Browser shortcuts
+ * The page-wide shortcuts. ↵ lives in the input box itself. Browser shortcuts
  * (⌘R, ⌘W, ⌘L, ⌘F, ⌘⇧C) are never taken over.
  */
 export function useShortcuts(actions: Actions) {
@@ -75,7 +76,6 @@ export function ShortcutsDialog({ open, onOpenChange }: { open: boolean; onOpenC
           </div>
         ))}
       </dl>
-      <p className="mt-4 text-xs text-slate-500">Enter adds a new line, because playground prompts are often multi-line.</p>
     </Dialog>
   )
 }

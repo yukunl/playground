@@ -47,7 +47,7 @@ export function useChat(faultPlan: () => FaultPlan = () => ({})) {
     active.current.set(runId, { chatId: stateRef.current.id, columnId, cancel: run.cancel })
   }, [])
 
-  /** ⌘↵: sends the message to every column at once, each with its own settings and history. */
+  /** ↵: sends the message to every column at once, each with its own settings and history. */
   const send = useCallback(
     (text: string) => {
       const { columns } = stateRef.current

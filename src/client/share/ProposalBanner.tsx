@@ -41,7 +41,7 @@ export function ProposalBanner({ proposal, columns, nameOf, isAvailable, onDismi
           <p className="mt-0.5">
             {answered
               ? 'These are the agent’s claims. The answers below were run live here, not sent by the agent.'
-              : `These are the agent’s claims. Press ⌘↵ to run ${choices.length > 1 ? 'both choices' : 'it'} live and judge the answers yourself.`}
+              : `These are the agent’s claims. Press Enter to run ${choices.length > 1 ? 'both choices' : 'it'} live and judge the answers yourself.`}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-0.5">

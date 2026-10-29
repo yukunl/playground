@@ -9,7 +9,7 @@ export function EmptyState({ onPick, disabled }: { onPick: (text: string) => voi
   return (
     <div className="pt-[12vh] text-center">
       <h2 className="text-lg font-semibold tracking-tight">Ready when you are.</h2>
-      <p className="mt-1 text-sm text-slate-500">Pick a model, write a prompt, press ⌘↵.</p>
+      <p className="mt-1 text-sm text-slate-500">Pick a model, write a prompt, press Enter.</p>
       <div className="mx-auto mt-6 flex max-w-xl flex-col gap-2">
         {EXAMPLES.map((text) => (
           <button

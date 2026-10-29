@@ -1,5 +1,4 @@
 import { useEffect, useRef, type KeyboardEvent, type ReactNode } from 'react'
-import { isMac } from '../shortcuts'
 
 type Props = {
   value: string
@@ -17,10 +16,10 @@ type Props = {
   trailing?: ReactNode
 }
 
-const RUN_KEY = isMac ? '⌘↵' : 'Ctrl+↵'
+const RUN_KEY = '↵'
 
 /**
- * ⌘↵ runs; Enter is a new line, because playground prompts are often multi-line.
+ * Enter runs, like a chat; Shift+Enter is a new line, for multi-line prompts.
  * You can keep drafting while an answer streams; Run turns into Stop in the same place.
  */
 export function Composer({ value, onChange, onRun, onStop, streaming, canRun, blockedReason, placeholder = 'Paste your prompt…', toolbar, trailing }: Props) {
@@ -38,8 +37,8 @@ export function Composer({ value, onChange, onRun, onStop, streaming, canRun, bl
   }, [value])
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    // ⌘⇧↵ (run again) is handled page-wide.
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !e.shiftKey) {
+    // ⌘⇧↵ (run again) is handled page-wide. Enter that confirms an IME word isn't a send.
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault()
       if (!streaming && canRun) onRun()
     }

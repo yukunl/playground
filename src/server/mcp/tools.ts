@@ -130,7 +130,7 @@ export const TOOLS: Tool[] = [
     name: 'open_in_playground',
     title: 'Open in the playground',
     description:
-      'Turns your top one or two setups into a playground link for the person. It opens them side by side in Compare, with your title, summary and reasons above them as your claims, and the test question in the message box. Nothing runs until they press ⌘↵ (Ctrl+Enter), so the answers they see are live, not yours. Give them the link.',
+      'Turns your top one or two setups into a playground link for the person. It opens them side by side in Compare, with your title, summary and reasons above them as your claims, and the test question in the message box. Nothing runs until they press Enter, so the answers they see are live, not yours. Give them the link.',
     input: OpenInput,
     annotations: { readOnlyHint: true, openWorldHint: false },
     async call(args, ctx) {
@@ -163,7 +163,7 @@ export const TOOLS: Tool[] = [
           {
             type: 'text',
             text:
-              `Give the person this link. It opens ${choices.length === 2 ? 'both choices side by side' : 'your choice'} with your claims above, and ⌘↵ runs ${choices.length === 2 ? 'them' : 'it'} live:\n${url}` +
+              `Give the person this link. It opens ${choices.length === 2 ? 'both choices side by side' : 'your choice'} with your claims above, and Enter runs ${choices.length === 2 ? 'them' : 'it'} live:\n${url}` +
               (long ? `\n\nThe link is ${url.length} characters; some apps cut long links off, so paste it whole.` : ''),
           },
         ],

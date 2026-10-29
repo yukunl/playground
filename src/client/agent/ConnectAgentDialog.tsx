@@ -113,8 +113,8 @@ function Steps() {
           <Hint>Use your own files and prices. The agent runs each case through the playground and judges the answers.</Hint>
         </Step>
 
-        <Step n={5} title="Open the link it gives you, and press ⌘↵">
-          <Hint>The finalists open side by side with the agent’s claims above them. Nothing has run yet: ⌘↵ runs both live, with their speed and cost.</Hint>
+        <Step n={5} title="Open the link it gives you, and press Enter">
+          <Hint>The finalists open side by side with the agent’s claims above them. Nothing has run yet: Enter runs both live, with their speed and cost.</Hint>
         </Step>
       </ol>
 
