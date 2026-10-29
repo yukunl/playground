@@ -6,8 +6,8 @@ Path 1, Model Playground, with two additional features:
 
 1. Two-way Compare: run the same prompt with different models or settings and
    compare answers side by side.
-2. Agent surface: a coding agent can use MCP to test models and settings, then
-   open its top choices in Compare.
+2. Agent interface: a coding agent can use MCP to test models and settings for
+   a task, then open its top choices in Compare for human review.
 
 ## Total time spent
 
